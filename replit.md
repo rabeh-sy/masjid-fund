@@ -2,6 +2,14 @@
 
 This is a Syrian mosque donation platform built with React and Express, featuring Arabic language support and RTL (right-to-left) design. The application allows users to browse Syrian mosques, view their details, explore donation projects, and interact with an integrated map interface. The platform serves as a charitable donation hub connecting donors with Syrian mosques in need of funding for various projects.
 
+## Recent Updates (January 2025)
+- Added donation verification system with trust badges and tooltips
+- Implemented custom mosque icons on interactive map with preview cards
+- Added auto-zoom functionality when filtering by city
+- Integrated session storage to preserve user preferences (view mode, filters)
+- Enhanced donation projects with optional image galleries
+- Improved user experience with persistent state management
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.

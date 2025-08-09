@@ -124,7 +124,7 @@ export class MemStorage implements IStorage {
           id: mosqueId,
           name: `${mosqueNames[nameIndex]} - ${city.name}`,
           city: city.name,
-          area: areas[i % areas.length],
+          area: areas[i % areas.length] as string,
           address: `${areas[i % areas.length]}، ${city.name}، سوريا`,
           latitude: city.lat + (Math.random() - 0.5) * 0.1,
           longitude: city.lng + (Math.random() - 0.5) * 0.1,
@@ -178,9 +178,10 @@ export class MemStorage implements IStorage {
             description: `مشروع ${donationTitles[j]} يهدف إلى تحسين الخدمات المقدمة للمصلين وتوفير بيئة مريحة للعبادة.`,
             targetAmount,
             currentAmount,
-            priority: priorities[j % priorities.length],
+            priority: priorities[j % priorities.length] as "عاجل" | "مستمر" | "جديد",
             isActive: true,
-            images: donationImages[j] || []
+            images: donationImages[j] || [],
+            isVerified: Math.random() > 0.4 // 60% chance of being verified
           };
 
           this.donations.set(donationId, donation);

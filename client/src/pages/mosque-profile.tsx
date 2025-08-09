@@ -1,11 +1,12 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { MapPin, Users, Calendar, Phone, Mail, ArrowRight, Target, TrendingUp } from "lucide-react";
+import { MapPin, Users, Calendar, Phone, Mail, ArrowRight, Target, TrendingUp, ShieldCheck } from "lucide-react";
 import { api } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function MosqueProfilePage() {
   const { id } = useParams();
@@ -160,14 +161,26 @@ export default function MosqueProfilePage() {
             <div className="space-y-6">
               {mosque.donations.map((donation) => {
                 const progress = donation.targetAmount > 0 
-                  ? Math.round((donation.currentAmount / donation.targetAmount) * 100) 
+                  ? Math.round(((donation.currentAmount || 0) / donation.targetAmount) * 100) 
                   : 0;
 
                 return (
                   <Card key={donation.id} className="border border-gray-200 hover:border-mosque-green-300 transition-colors">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <h3 className="font-bold text-mosque-green-700 text-xl">{donation.title}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-mosque-green-700 text-xl">{donation.title}</h3>
+                          {donation.isVerified && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <ShieldCheck className="w-5 h-5 text-green-600 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="text-sm">تم التحقق من هذا التبرع من قبل فريقنا</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                        </div>
                         <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getPriorityColor(donation.priority)}`}>
                           {donation.priority}
                         </span>
@@ -200,7 +213,7 @@ export default function MosqueProfilePage() {
                           </div>
                           <div className="flex items-center text-green-600">
                             <TrendingUp className="w-4 h-4 ml-1" />
-                            <span>تم جمع: {donation.currentAmount.toLocaleString('ar-SA')} ل.س</span>
+                            <span>تم جمع: {(donation.currentAmount || 0).toLocaleString('ar-SA')} ل.س</span>
                           </div>
                         </div>
                         

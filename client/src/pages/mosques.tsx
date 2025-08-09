@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search, List, Map } from "lucide-react";
 import { api } from "@/lib/api";
@@ -10,12 +10,51 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLocation } from "wouter";
 
+// Session storage keys
+const STORAGE_KEYS = {
+  viewMode: 'mosques_view_mode',
+  searchQuery: 'mosques_search_query',
+  selectedCity: 'mosques_selected_city',
+  selectedSize: 'mosques_selected_size',
+};
+
 export default function MosquesPage() {
   const [, setLocation] = useLocation();
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  const [selectedSize, setSelectedSize] = useState<string>('');
+  
+  // Initialize state from session storage
+  const [viewMode, setViewMode] = useState<'map' | 'list'>(() => {
+    const stored = sessionStorage.getItem(STORAGE_KEYS.viewMode);
+    return (stored as 'map' | 'list') || 'map';
+  });
+  
+  const [searchQuery, setSearchQuery] = useState(() => {
+    return sessionStorage.getItem(STORAGE_KEYS.searchQuery) || '';
+  });
+  
+  const [selectedCity, setSelectedCity] = useState<string>(() => {
+    return sessionStorage.getItem(STORAGE_KEYS.selectedCity) || '';
+  });
+  
+  const [selectedSize, setSelectedSize] = useState<string>(() => {
+    return sessionStorage.getItem(STORAGE_KEYS.selectedSize) || '';
+  });
+
+  // Save to session storage whenever state changes
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEYS.viewMode, viewMode);
+  }, [viewMode]);
+
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEYS.searchQuery, searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEYS.selectedCity, selectedCity);
+  }, [selectedCity]);
+
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEYS.selectedSize, selectedSize);
+  }, [selectedSize]);
 
   const { data: mosques = [], isLoading, error } = useQuery({
     queryKey: ['/api/mosques', searchQuery, selectedCity, selectedSize],
@@ -150,7 +189,11 @@ export default function MosquesPage() {
         <>
           {viewMode === 'map' ? (
             <Card className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <MosqueMap mosques={mosques} onMosqueClick={handleMosqueClick} />
+              <MosqueMap 
+                mosques={mosques} 
+                onMosqueClick={handleMosqueClick} 
+                selectedCity={selectedCity}
+              />
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
