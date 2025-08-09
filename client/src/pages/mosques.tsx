@@ -1,0 +1,215 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Search, List, Map } from "lucide-react";
+import { api } from "@/lib/api";
+import type { MosqueWithDonations } from "@shared/schema";
+import MosqueCard from "@/components/mosque-card";
+import MosqueMap from "@/components/mosque-map";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useLocation } from "wouter";
+
+export default function MosquesPage() {
+  const [, setLocation] = useLocation();
+  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [selectedSize, setSelectedSize] = useState<string>('');
+
+  const { data: mosques = [], isLoading, error } = useQuery({
+    queryKey: ['/api/mosques', searchQuery, selectedCity, selectedSize],
+    queryFn: () => api.mosques.getAll({
+      search: searchQuery || undefined,
+      city: selectedCity || undefined,
+      size: selectedSize || undefined
+    }),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const handleMosqueClick = (mosque: MosqueWithDonations) => {
+    setLocation(`/mosque/${mosque.id}`);
+  };
+
+  const cities = ["دمشق", "حلب", "حمص", "اللاذقية", "طرطوس"];
+  const sizes = ["صغير", "متوسط", "كبير"];
+
+  return (
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Search and Filter Controls */}
+      <Card className="bg-white rounded-lg shadow-sm mb-6">
+        <CardContent className="p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Search Input */}
+            <div className="flex-1 max-w-md relative">
+              <Input
+                type="text"
+                placeholder="البحث عن مسجد..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pr-10 text-right"
+              />
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <Search className="w-4 h-4 text-gray-400" />
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div className="flex flex-wrap gap-3">
+              <select 
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mosque-green-600 focus:border-mosque-green-600 text-right"
+              >
+                <option value="">جميع المدن</option>
+                {cities.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
+              
+              <select 
+                value={selectedSize}
+                onChange={(e) => setSelectedSize(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mosque-green-600 focus:border-mosque-green-600 text-right"
+              >
+                <option value="">جميع الأحجام</option>
+                {sizes.map(size => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* View Toggle */}
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode('map')}
+                className={`flex items-center px-4 py-2 rounded-md font-medium transition-colors ${
+                  viewMode === 'map' 
+                    ? 'bg-mosque-green-600 text-white' 
+                    : 'text-gray-600 hover:text-mosque-green-600'
+                }`}
+              >
+                <Map className="w-4 h-4 ml-2" />
+                خريطة
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`flex items-center px-4 py-2 rounded-md font-medium transition-colors ${
+                  viewMode === 'list' 
+                    ? 'bg-mosque-green-600 text-white' 
+                    : 'text-gray-600 hover:text-mosque-green-600'
+                }`}
+              >
+                <List className="w-4 h-4 ml-2" />
+                قائمة
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Error State */}
+      {error && (
+        <Card className="bg-red-50 border-red-200 mb-6">
+          <CardContent className="p-6">
+            <p className="text-red-600 text-center">
+              عذراً، حدث خطأ في تحميل البيانات. يرجى المحاولة مرة أخرى.
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Loading State */}
+      {isLoading && (
+        <div className="space-y-6">
+          {viewMode === 'map' ? (
+            <Skeleton className="h-96 lg:h-[600px] w-full rounded-lg" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <Card key={i}>
+                  <Skeleton className="aspect-video" />
+                  <CardContent className="p-6">
+                    <Skeleton className="h-6 mb-2" />
+                    <Skeleton className="h-4 mb-3 w-2/3" />
+                    <Skeleton className="h-16 mb-4" />
+                    <div className="flex justify-between">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-8 w-20" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Content */}
+      {!isLoading && !error && (
+        <>
+          {viewMode === 'map' ? (
+            <Card className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <MosqueMap mosques={mosques} onMosqueClick={handleMosqueClick} />
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mosques.length > 0 ? (
+                mosques.map(mosque => (
+                  <MosqueCard key={mosque.id} mosque={mosque} />
+                ))
+              ) : (
+                <Card className="col-span-full">
+                  <CardContent className="p-8 text-center">
+                    <p className="text-gray-500">لا توجد مساجد تطابق معايير البحث.</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Footer */}
+      <footer className="bg-mosque-green-700 text-white mt-12 -mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center ml-3">
+                  <span className="text-mosque-green-700 text-sm">🕌</span>
+                </div>
+                <h3 className="text-lg font-bold">مساجد سوريا</h3>
+              </div>
+              <p className="text-mosque-green-50 text-sm">
+                منصة إلكترونية لدعم مساجد سوريا من خلال التبرعات وتقديم المساعدة للمشاريع الخيرية والصيانة.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold mb-4">روابط سريعة</h4>
+              <ul className="space-y-2 text-sm text-mosque-green-50">
+                <li><a href="#" className="hover:text-white transition-colors">عن المشروع</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">كيفية التبرع</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">تواصل معنا</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">الأسئلة الشائعة</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-bold mb-4">تواصل معنا</h4>
+              <div className="space-y-2 text-sm text-mosque-green-50">
+                <p>info@syria-mosques.org</p>
+                <p>+963-11-1234567</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-mosque-green-600 mt-8 pt-8 text-center text-sm text-mosque-green-50">
+            <p>© 2024 مساجد سوريا. جميع الحقوق محفوظة.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  );
+}
