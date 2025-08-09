@@ -31,16 +31,7 @@ export default function MosqueMap({ mosques, onMosqueClick, selectedCity }: Mosq
   const [previewPosition, setPreviewPosition] = useState<{ x: number; y: number } | null>(null);
   const [, setLocation] = useLocation();
 
-  // Auto-zoom to selected city
-  useEffect(() => {
-    if (!mapInstanceRef.current || !selectedCity || selectedCity === "جميع المدن") return;
-    
-    const cityData = CITY_COORDINATES[selectedCity as keyof typeof CITY_COORDINATES];
-    if (cityData) {
-      mapInstanceRef.current.setView([cityData.lat, cityData.lng], cityData.zoom);
-    }
-  }, [selectedCity]);
-
+  // Initialize map only once
   useEffect(() => {
     if (!mapRef.current || !window.L) return;
 
@@ -52,6 +43,18 @@ export default function MosqueMap({ mosques, onMosqueClick, selectedCity }: Mosq
         attribution: '© OpenStreetMap contributors'
       }).addTo(mapInstanceRef.current);
     }
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, []);
+
+  // Update markers when mosques change
+  useEffect(() => {
+    if (!mapInstanceRef.current || !window.L) return;
 
     // Clear existing markers
     mapInstanceRef.current.eachLayer((layer: any) => {
@@ -92,14 +95,26 @@ export default function MosqueMap({ mosques, onMosqueClick, selectedCity }: Mosq
         if (onMosqueClick) onMosqueClick(mosque);
       });
     });
-
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
   }, [mosques, onMosqueClick]);
+
+  // Auto-zoom to selected city (separate effect to avoid re-rendering)
+  useEffect(() => {
+    if (!mapInstanceRef.current || !selectedCity || selectedCity === "جميع المدن") {
+      // Reset to default view when no city selected
+      if (mapInstanceRef.current && selectedCity === "") {
+        mapInstanceRef.current.setView([35.0, 38.0], 7);
+      }
+      return;
+    }
+    
+    const cityData = CITY_COORDINATES[selectedCity as keyof typeof CITY_COORDINATES];
+    if (cityData) {
+      mapInstanceRef.current.setView([cityData.lat, cityData.lng], cityData.zoom, {
+        animate: true,
+        duration: 1
+      });
+    }
+  }, [selectedCity]);
 
   const handleViewProfile = () => {
     if (selectedMosque) {
