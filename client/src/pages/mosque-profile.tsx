@@ -173,10 +173,12 @@ export default function MosqueProfilePage() {
                           {donation.isVerified && (
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <ShieldCheck className="w-5 h-5 text-green-600 cursor-help" />
+                                <div className="cursor-help">
+                                  <ShieldCheck className="w-5 h-5 text-green-600" />
+                                </div>
                               </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="text-sm">تم التحقق من هذا التبرع من قبل فريقنا</p>
+                              <TooltipContent side="top">
+                                <p className="text-sm font-arabic">تم التحقق من هذا التبرع من قبل فريقنا</p>
                               </TooltipContent>
                             </Tooltip>
                           )}
