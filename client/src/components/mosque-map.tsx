@@ -92,7 +92,6 @@ export default function MosqueMap({ mosques, onMosqueClick, selectedCity }: Mosq
         const { containerPoint } = e;
         setPreviewPosition({ x: containerPoint.x, y: containerPoint.y });
         setSelectedMosque(mosque);
-        if (onMosqueClick) onMosqueClick(mosque);
       });
     });
   }, [mosques, onMosqueClick]);
