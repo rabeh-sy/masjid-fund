@@ -31,6 +31,7 @@ export const donations = pgTable("donations", {
   currentAmount: integer("current_amount").default(0),
   priority: text("priority", { enum: ["عاجل", "مستمر", "جديد"] }).default("جديد"),
   isActive: boolean("is_active").default(true),
+  images: text("images").array().default([]),
 });
 
 export const insertMosqueSchema = createInsertSchema(mosques).omit({

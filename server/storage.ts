@@ -131,7 +131,7 @@ export class MemStorage implements IStorage {
           size: sizes[i % sizes.length] as "صغير" | "متوسط" | "كبير",
           description: `مسجد مميز في ${city.name} يقدم خدمات دينية واجتماعية للمجتمع المحلي. يتميز بتصميمه المعماري الإسلامي الأصيل ويحتوي على مرافق حديثة لخدمة المصلين.`,
           mainImage: images[i % images.length],
-          coverImage: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400",
+          coverImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400",
           gallery: [
             "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
             "https://images.unsplash.com/photo-1549813069-f95e44d7f498?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
@@ -148,6 +148,23 @@ export class MemStorage implements IStorage {
         // Add donations for each mosque
         const donationTitles = ["صيانة أنابيب المياه", "تجديد السجاد", "مكتبة القرآن الكريم", "إضاءة المسجد", "تكييف الهواء"];
         const priorities = ["عاجل", "مستمر", "جديد"] as const;
+        const donationImages = [
+          [
+            "https://images.unsplash.com/photo-1580983561371-7f4b242d8ec0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
+            "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"
+          ],
+          [
+            "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300",
+            "https://images.unsplash.com/photo-1549813069-f95e44d7f498?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"
+          ],
+          [
+            "https://images.unsplash.com/photo-1564769625905-50e93615e769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"
+          ],
+          [],
+          [
+            "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"
+          ]
+        ];
         
         for (let j = 0; j < Math.min(3, donationTitles.length); j++) {
           const donationId = randomUUID();
@@ -162,7 +179,8 @@ export class MemStorage implements IStorage {
             targetAmount,
             currentAmount,
             priority: priorities[j % priorities.length],
-            isActive: true
+            isActive: true,
+            images: donationImages[j] || []
           };
 
           this.donations.set(donationId, donation);

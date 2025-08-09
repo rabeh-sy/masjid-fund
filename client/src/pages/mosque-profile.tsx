@@ -173,7 +173,24 @@ export default function MosqueProfilePage() {
                         </span>
                       </div>
                       
-                      <p className="text-gray-700 text-sm mb-6">{donation.description}</p>
+                      <p className="text-gray-700 text-sm mb-4">{donation.description}</p>
+                      
+                      {/* Donation Images */}
+                      {donation.images && donation.images.length > 0 && (
+                        <div className="mb-4">
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {donation.images.map((image, index) => (
+                              <div key={index} className="aspect-[4/3] overflow-hidden rounded-md">
+                                <img 
+                                  src={image} 
+                                  alt={`صورة ${donation.title} ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-6 text-sm">
@@ -187,12 +204,7 @@ export default function MosqueProfilePage() {
                           </div>
                         </div>
                         
-                        <Button 
-                          className="bg-mosque-gold-600 hover:bg-mosque-gold-600/90 text-white"
-                          size="sm"
-                        >
-                          تفاصيل التبرع
-                        </Button>
+
                       </div>
 
                       {/* Progress Bar */}
