@@ -13,11 +13,10 @@ export const mosques = pgTable("mosques", {
   longitude: real("longitude").notNull(),
   size: text("size", { enum: ["صغير", "متوسط", "كبير"] }).notNull(),
   description: text("description").notNull(),
-  mainImage: text("main_image").notNull(),
-  coverImage: text("cover_image").notNull(),
+  cover_image: text("cover_image").notNull(),
   gallery: text("gallery").array().default([]),
   capacity: integer("capacity"),
-  establishedYear: integer("established_year"),
+  establish_year: integer("established_year"),
   phone: text("phone"),
   email: text("email"),
 });
@@ -27,12 +26,12 @@ export const donations = pgTable("donations", {
   mosqueId: varchar("mosque_id").references(() => mosques.id).notNull(),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  targetAmount: integer("target_amount").notNull(),
-  currentAmount: integer("current_amount").default(0),
+  target_amount: integer("target_amount").notNull(),
+  current_amount: integer("current_amount").default(0),
   priority: text("priority", { enum: ["عاجل", "مستمر", "جديد"] }).default("جديد"),
   isActive: boolean("is_active").default(true),
   images: text("images").array().default([]),
-  isVerified: boolean("is_verified").default(false),
+  is_verified: boolean("is_verified").default(false),
 });
 
 export const insertMosqueSchema = createInsertSchema(mosques).omit({
@@ -41,7 +40,7 @@ export const insertMosqueSchema = createInsertSchema(mosques).omit({
 
 export const insertDonationSchema = createInsertSchema(donations).omit({
   id: true,
-  currentAmount: true,
+  current_amount: true,
 });
 
 export type InsertMosque = z.infer<typeof insertMosqueSchema>;
@@ -51,5 +50,5 @@ export type Donation = typeof donations.$inferSelect;
 
 export type MosqueWithDonations = Mosque & {
   donations: Donation[];
-  donationsCount: number;
+  donations_count: number;
 };

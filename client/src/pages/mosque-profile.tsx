@@ -90,7 +90,7 @@ export default function MosqueProfilePage() {
       {/* Cover Photo */}
       <div className="aspect-[3/1] overflow-hidden rounded-lg mb-8">
         <img 
-          src={mosque.coverImage} 
+          src={mosque.cover_image} 
           alt="صورة غلاف المسجد" 
           className="w-full h-full object-cover"
         />
@@ -115,10 +115,10 @@ export default function MosqueProfilePage() {
                 <span>يتسع لـ {mosque.capacity} مصلي</span>
               </div>
             )}
-            {mosque.establishedYear && (
+            {mosque.establish_year && (
               <div className="flex items-center">
                 <Calendar className="text-mosque-green-600 w-5 h-5 ml-3" />
-                <span>تأسس عام {mosque.establishedYear}</span>
+                <span>تأسس عام {mosque.establish_year}</span>
               </div>
             )}
           </div>
@@ -160,8 +160,8 @@ export default function MosqueProfilePage() {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">مشاريع التبرعات المفتوحة</h2>
             <div className="space-y-6">
               {mosque.donations.map((donation) => {
-                const progress = donation.targetAmount > 0 
-                  ? Math.round(((donation.currentAmount || 0) / donation.targetAmount) * 100) 
+                const progress = donation.target_amount > 0 
+                  ? Math.round(((donation.current_amount || 0) / donation.target_amount) * 100) 
                   : 0;
 
                 return (
@@ -170,7 +170,7 @@ export default function MosqueProfilePage() {
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold text-mosque-green-700 text-xl">{donation.title}</h3>
-                          {donation.isVerified && (
+                          {donation.is_verified && (
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <div className="cursor-help">
@@ -211,11 +211,11 @@ export default function MosqueProfilePage() {
                         <div className="flex items-center gap-6 text-sm">
                           <div className="flex items-center text-mosque-gold-600">
                             <Target className="w-4 h-4 ml-1" />
-                            <span>المبلغ المطلوب: {donation.targetAmount.toLocaleString('ar-SA')} ل.س</span>
+                            <span>المبلغ المطلوب: {donation.target_amount.toLocaleString('ar-SA')} ل.س</span>
                           </div>
                           <div className="flex items-center text-green-600">
                             <TrendingUp className="w-4 h-4 ml-1" />
-                            <span>تم جمع: {(donation.currentAmount || 0).toLocaleString('ar-SA')} ل.س</span>
+                            <span>تم جمع: {(donation.current_amount || 0).toLocaleString('ar-SA')} ل.س</span>
                           </div>
                         </div>
                         

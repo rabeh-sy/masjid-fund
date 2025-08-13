@@ -70,8 +70,8 @@ export default function MosquesPage() {
     setLocation(`/mosque/${mosque.id}`);
   };
 
-  const cities = ["دمشق", "حلب", "حمص", "اللاذقية", "طرطوس"];
-  const sizes = ["صغير", "متوسط", "كبير"];
+  const cities = [ { value: "0", label: "حلب" }, { value: "1", label: "دمشق" } ];
+  const sizes = [ { value: "0", label: "صغيرة" }, { value: "1", label: "متوسطة" }, { value: "2", label: "كبيرة" } ];
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -102,7 +102,7 @@ export default function MosquesPage() {
               >
                 <option value="">جميع المدن</option>
                 {cities.map(city => (
-                  <option key={city} value={city}>{city}</option>
+                  <option key={city.value} value={city.value}>{city.label}</option>
                 ))}
               </select>
               
@@ -113,7 +113,7 @@ export default function MosquesPage() {
               >
                 <option value="">جميع الأحجام</option>
                 {sizes.map(size => (
-                  <option key={size} value={size}>{size}</option>
+                  <option key={size.value} value={size.value}>{size.label}</option>
                 ))}
               </select>
             </div>

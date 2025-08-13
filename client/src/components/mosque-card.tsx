@@ -12,7 +12,7 @@ export default function MosqueCard({ mosque }: MosqueCardProps) {
     <Card className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <div className="aspect-video overflow-hidden">
         <img 
-          src={mosque.mainImage} 
+          src={mosque.cover_image} 
           alt={mosque.name}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
         />
@@ -34,7 +34,7 @@ export default function MosqueCard({ mosque }: MosqueCardProps) {
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-500 flex items-center">
             <Heart className="text-mosque-gold-600 w-4 h-4 ml-1" />
-            <span>{mosque.donationsCount} مشاريع تبرعات</span>
+            <span>{mosque.donations_count} مشاريع تبرعات</span>
           </div>
           
           <Link href={`/mosque/${mosque.id}`}>
