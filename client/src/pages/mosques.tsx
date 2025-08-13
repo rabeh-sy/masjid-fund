@@ -212,47 +212,6 @@ export default function MosquesPage() {
           )}
         </>
       )}
-
-      {/* Footer */}
-      <footer className="bg-mosque-green-700 text-white mt-12 -mx-4 sm:-mx-6 lg:-mx-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center ml-3">
-                  <span className="text-mosque-green-700 text-sm">🕌</span>
-                </div>
-                <h3 className="text-lg font-bold">مساجد سوريا</h3>
-              </div>
-              <p className="text-mosque-green-50 text-sm">
-                منصة إلكترونية لدعم مساجد سوريا من خلال التبرعات وتقديم المساعدة للمشاريع الخيرية والصيانة.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-bold mb-4">روابط سريعة</h4>
-              <ul className="space-y-2 text-sm text-mosque-green-50">
-                <li><a href="#" className="hover:text-white transition-colors">عن المشروع</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">كيفية التبرع</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">تواصل معنا</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">الأسئلة الشائعة</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-bold mb-4">تواصل معنا</h4>
-              <div className="space-y-2 text-sm text-mosque-green-50">
-                <p>info@syria-mosques.org</p>
-                <p>+963-11-1234567</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-mosque-green-600 mt-8 pt-8 text-center text-sm text-mosque-green-50">
-            <p>© 2024 مساجد سوريا. جميع الحقوق محفوظة.</p>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }
