@@ -21,10 +21,10 @@ const STORAGE_KEYS = {
 export default function MosquesPage() {
   const [, setLocation] = useLocation();
   
-  // Initialize state from session storage
+  // Initialize state from session storage - default to list view
   const [viewMode, setViewMode] = useState<'map' | 'list'>(() => {
     const stored = sessionStorage.getItem(STORAGE_KEYS.viewMode);
-    return (stored as 'map' | 'list') || 'map';
+    return (stored as 'map' | 'list') || 'list';
   });
   
   const [searchQuery, setSearchQuery] = useState(() => {
