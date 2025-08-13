@@ -37,7 +37,10 @@ export default function MosqueMap({ mosques, onMosqueClick, selectedCity }: Mosq
 
     // Initialize map
     if (!mapInstanceRef.current) {
-      mapInstanceRef.current = window.L.map(mapRef.current).setView([35.0, 38.0], 7);
+      mapInstanceRef.current = window.L.map(mapRef.current, {
+        scrollWheelZoom: false, // Disable scroll wheel zoom
+        zoomControl: true // Keep zoom buttons
+      }).setView([35.0, 38.0], 7);
       
       window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
@@ -135,9 +138,9 @@ export default function MosqueMap({ mosques, onMosqueClick, selectedCity }: Mosq
         <div 
           className="absolute z-[1000] pointer-events-none"
           style={{ 
-            left: previewPosition.x + 10, 
-            top: previewPosition.y - 100,
-            transform: 'translateX(-50%)'
+            left: Math.min(previewPosition.x + 10, window.innerWidth - 320), // Keep within bounds
+            top: Math.max(previewPosition.y - 100, 10), // Keep above minimum top
+            transform: previewPosition.x > window.innerWidth - 320 ? 'translateX(-100%)' : 'none'
           }}
         >
           <div className="pointer-events-auto">

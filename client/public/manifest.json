@@ -1,0 +1,26 @@
+{
+  "name": "مساجد سوريا - منصة التبرعات",
+  "short_name": "مساجد سوريا",
+  "description": "منصة التبرعات للمساجد السورية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#E6E6DC",
+  "theme_color": "#103935",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "lang": "ar",
+  "dir": "rtl"
+}
