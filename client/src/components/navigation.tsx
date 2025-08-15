@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Church } from "lucide-react";
+import { House } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Navigation() {
@@ -10,7 +10,7 @@ export default function Navigation() {
           <Link href="/" className="flex items-center space-x-4 space-x-reverse">
             <div className="flex items-center">
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center ml-3">
-                <Church className="text-primary-foreground text-sm w-4 h-4" />
+                <House className="text-primary-foreground text-sm w-4 h-4" />
               </div>
               <h1 className="text-xl font-bold text-primary">مساجد سوريا</h1>
             </div>

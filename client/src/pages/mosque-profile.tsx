@@ -117,7 +117,7 @@ export default function MosqueProfilePage() {
       </div>
 
       {/* Cover Photo */}
-      <div className="aspect-[3/1] overflow-hidden rounded-lg mb-8">
+      <div className="aspect-[2/1] overflow-hidden rounded-lg mb-8">
         <img 
           src={mosque.cover_image} 
           alt="صورة غلاف المسجد" 
